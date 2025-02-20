@@ -28,7 +28,7 @@ final Map<String, String> zhCN = {
 
   // ##AiTranslator
   L10nEnum.hiIAmDeepSeek: '嗨！我是 DeepSeek',
-  L10nEnum.canHelpWithQuestionsAndWriting: '我可以帮你答疑、写作，请把你的任务交吧~',
+  L10nEnum.canHelpWithQuestionsAndWriting: '我可以帮你答疑、写作，请把你的任务交给我吧~',
   L10nEnum.copySuccess: '复制成功',
   L10nEnum.copy: '复制',
   L10nEnum.deepThinking: '深度思考',
