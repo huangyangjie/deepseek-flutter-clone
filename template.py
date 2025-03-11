@@ -11,8 +11,7 @@ def camel_case(s):
 def bindings_file(folder_name):
     # 转为大驼峰
     folderName = camel_case(folder_name.capitalize())
-    return f"""
-import 'package:get/get.dart';
+    return f"""import 'package:get/get.dart';
 
 import '../controllers/{folder_name}_controller.dart';
 
@@ -31,8 +30,7 @@ class {folderName}Binding extends Binding {{
 def controllers_file(folder_name):
     # 首字母大写
     folderName = camel_case(folder_name.capitalize())
-    return f"""
-import 'package:get/get.dart';
+    return f"""import 'package:get/get.dart';
 
 class {folderName}Controller extends GetxController {{
   
@@ -42,8 +40,7 @@ class {folderName}Controller extends GetxController {{
 def views_file(folder_name):
     # 首字母大写
     folderName = camel_case(folder_name.capitalize())
-    return f"""
-import 'package:flutter/material.dart';
+    return f"""import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/{folder_name}_controller.dart';

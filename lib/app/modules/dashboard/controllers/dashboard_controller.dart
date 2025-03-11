@@ -68,18 +68,24 @@ class DashboardController extends GetxController {
       currentUuid = DateTime.now().millisecondsSinceEpoch.toString();
       OpenaiRequest.addMessageHistory(currentUuid, content);
     }
-    messages.add(Message(content: content, role: OpenAIChatMessageRole.user));
+    messages.add(Message(content: "今天天气不错", role: OpenAIChatMessageRole.user));
+    messages.add(Message(content: '是啊，真不错', role: OpenAIChatMessageRole.assistant));
+    messages.add(Message(content: '我刚刚问了什么？', role: OpenAIChatMessageRole.user));
     messages.add(Message(content: '', role: OpenAIChatMessageRole.assistant));
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
 
     OpenaiRequest.addChat(
-      messages,
-      (response) {
+      messages: messages,
+      callback: (response) {
         messages.last.addNewMessage(response);
         messages.refresh();
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       },
       onDone: () {
+        if (messages.last.content == '') {
+          messages.removeLast();
+          return;
+        }
         messages.last.content = messages.last.content
             .split("<|im_end|>")[0]
             .replaceAll("<|im_start|>assistant", "");

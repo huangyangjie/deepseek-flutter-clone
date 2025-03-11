@@ -1,12 +1,12 @@
 import 'dart:developer';
 
+import 'package:deepseek/app/modules/chat/bindings/chat_binding.dart';
+import 'package:deepseek/app/modules/chat/views/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../modules/settings/children/model/bindings/model_binding.dart';
 import '../modules/settings/children/model/views/model_view.dart';
-import '../modules/dashboard/bindings/dashboard_binding.dart';
-import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/children/dark_mode/bindings/dark_mode_binding.dart';
 import '../modules/settings/children/dark_mode/views/dark_mode_view.dart';
@@ -30,8 +30,8 @@ class AppPages {
     GetPage(
       name: _Paths.dashboard,
       participatesInRootNavigator: true,
-      page: () => const DashboardView(),
-      bindings: [DashboardBinding()],
+      page: () => const ChatView(),
+      bindings: [ChatBinding()],
     ),
     GetPage(
       name: _Paths.settings,

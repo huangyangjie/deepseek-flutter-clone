@@ -32,20 +32,21 @@ class AppSharedPref {
 
   /// get if the current theme type is light
   static bool getThemeIsLight() =>
-      _sharedPreferences.getBool(_lightThemeKey) ?? true; // todo set the default theme (true for light, false for dark)
+      _sharedPreferences.getBool(_lightThemeKey) ??
+      true; // todo set the default theme (true for light, false for dark)
 
   /// save current locale
   static Future<void> setCurrentLanguage(String languageCode) =>
       _sharedPreferences.setString(_currentLocalKey, languageCode);
 
   /// get current locale
-  static Locale getCurrentLocal(){
-      String? langCode = _sharedPreferences.getString(_currentLocalKey);
-      // default language is english
-      if(langCode == null){
-        return LocalizationService.defaultLanguage;
-      }
-      return LocalizationService.supportedLanguages[langCode]!;
+  static Locale getCurrentLocal() {
+    String? langCode = _sharedPreferences.getString(_currentLocalKey);
+    // default language is english
+    if (langCode == null) {
+      return LocalizationService.defaultLanguage;
+    }
+    return LocalizationService.supportedLanguages[langCode]!;
   }
 
   /// clear all data from shared pref
@@ -59,7 +60,10 @@ class AppSharedPref {
     return await _sharedPreferences.setStringList('chat_history_uuid', uuids);
   }
 
-  static Future<void> saveChatHistory(String uuid, List<String> chatHistory) async {
+  static Future<void> saveChatHistory(
+    String uuid,
+    List<String> chatHistory,
+  ) async {
     _sharedPreferences.setStringList('chat_history_uuid_$uuid', chatHistory);
   }
 
@@ -72,14 +76,15 @@ class AppSharedPref {
   }
 
   static CustomModel getCustomModel() {
-    String customModelString = _sharedPreferences.getString('custom_model') ?? '';
+    String customModelString =
+        _sharedPreferences.getString('custom_model') ?? '';
     if (customModelString.isEmpty) {
       return CustomModel(
         isActivate: false,
         baseUrl: '',
         apiKey: '',
-        normalModel: 'deepseek-v3',
-        deepThinkingModel: 'deepseek-r1',
+        normalModel: 'deepseek-chat',
+        deepThinkingModel: 'deepseek-reasoner',
       );
     }
     return CustomModel.fromJson(jsonDecode(customModelString));
@@ -87,5 +92,43 @@ class AppSharedPref {
 
   static Future<bool> setCustomModel(CustomModel model) async {
     return await _sharedPreferences.setString('custom_model', model.toString());
+  }
+
+  static Future<bool> setConversionModel(ConversationModel model) async {
+    return await _sharedPreferences.setString(
+      'conversation_${model.uuid}',
+      model.toJson(),
+    );
+  }
+
+  static Future<bool> removeConversionModel(String uuid) async {
+    return await _sharedPreferences.remove('conversation_$uuid');
+  }
+
+  static ConversationModel getConversionModel(String uuid) {
+    String conversationString =
+        _sharedPreferences.getString('conversation_$uuid') ?? '';
+    if (conversationString.isEmpty) {
+      return ConversationModel(uuid: uuid, title: '', messages: []);
+    }
+    return ConversationModel.fromJson(conversationString);
+  }
+
+  static Future<bool> setHistoryConversationModel(
+    HistoryConversationModel history,
+  ) async {
+    return await _sharedPreferences.setString(
+      'history_conversation',
+      history.toUuidJson(),
+    );
+  }
+
+  static HistoryConversationModel getHistoryConversationModel() {
+    String historyString =
+        _sharedPreferences.getString('history_conversation') ?? '';
+    if (historyString.isEmpty) {
+      return HistoryConversationModel(conversations: {});
+    }
+    return HistoryConversationModel.fromUuidJson(historyString);
   }
 }

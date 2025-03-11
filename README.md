@@ -65,8 +65,8 @@ flutter run
 1. Create `api_config.dart` in `lib/configs` directory
 2. Add your API configuration:
 ```dart
-const String apiKey = 'YOUR_API_KEY';
-const String baseUrl = 'YOUR_API_ENDPOINT';
+const String apiKey = 'YOUR_API_KEY';// sk-****************
+const String baseUrl = 'YOUR_API_ENDPOINT'; // "https://dashscope.aliyuncs.com/compatible-mode"
 ```
 
 ## 📸 Screenshots

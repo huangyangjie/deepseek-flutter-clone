@@ -1,3 +1,4 @@
+import 'package:deepseek/utils/openai_server.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       title: "Application",
-      binds: [],
+      binds: [Bind.put(OpenaiService())],
       translations: LocalizationService.getInstance(),
       defaultTransition: Transition.noTransition,
       getPages: AppPages.routes,
@@ -27,5 +28,3 @@ Future<void> main() async {
     ),
   );
 }
-
-

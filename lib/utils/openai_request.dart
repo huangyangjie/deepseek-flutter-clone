@@ -119,15 +119,15 @@ class OpenaiRequest {
     if (model.isActivate) {
       OpenAI.baseUrl = model.baseUrl;
       OpenAI.apiKey = model.apiKey;
-      OpenAI.showLogs = false;
-      OpenAI.showResponsesLogs = false;
+      OpenAI.showLogs = true;
+      OpenAI.showResponsesLogs = true;
       _customModelName = model.normalModel;
       _deepThinkModelName = model.deepThinkingModel;
     } else {
       OpenAI.baseUrl = ApiConfig.baseUrl;
       OpenAI.apiKey = ApiConfig.apiKey;
-      OpenAI.showLogs = false;
-      OpenAI.showResponsesLogs = false;
+      OpenAI.showLogs = true;
+      OpenAI.showResponsesLogs = true;
     }
 
     loadMessageHistory();
@@ -154,23 +154,52 @@ class OpenaiRequest {
     return content;
   }
 
-  static void addChat(
-    List<Message> messages,
-    void Function(String)? callback, {
-    void Function()? onDone,
+  static void addChat({
+    required List<Message> messages,
+    required void Function(String) callback,
+    required void Function() onDone,
   }) {
+    var tempmessages = [
+      OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Hello, can you say: 'You are Anas'",
+          ),
+        ],
+        role: OpenAIChatMessageRole.user,
+      ),
+      OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "You are Anas",
+          ),
+        ],
+        role: OpenAIChatMessageRole.assistant,
+      ),
+      OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Now I want you to repeat it, but change the word 'Anas' to 'Mohamed'",
+          ),
+        ],
+        role: OpenAIChatMessageRole.user,
+      ),
+    ];
+
     final chatStream = OpenAI.instance.chat.createStream(
       model: _model,
-      messages: _contentFromMessage(messages),
-      seed: 423,
-      n: 2,
+      messages: tempmessages, //_contentFromMessage(messages),
     );
-    chatStream.listen((streamChatCompletion) {
-      final content = streamChatCompletion.choices.first.delta.content;
-      callback!(content?[0]?.text ?? "");
-    }, onDone: onDone, onError: (error) {
-      callback!("DeepSeek Error: $error");
-      onDone!();
-    });
+    chatStream.listen(
+      (streamChatCompletion) {
+        final content = streamChatCompletion.choices.first.delta.content;
+        callback(content?[0]?.text ?? "");
+      },
+      onDone: onDone,
+      onError: (error) {
+        callback("DeepSeek Error: $error");
+        onDone();
+      },
+    );
   }
 }
