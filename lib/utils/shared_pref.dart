@@ -87,7 +87,7 @@ class AppSharedPref {
         deepThinkingModel: 'deepseek-reasoner',
       );
     }
-    return CustomModel.fromJson(jsonDecode(customModelString));
+    return CustomModel.fromJson(customModelString);
   }
 
   static Future<bool> setCustomModel(CustomModel model) async {
